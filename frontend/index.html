@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="de">
+<head> 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event-Management</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>    
+<body>
+    <header>
+        <h1>Event-Übersicht</h1>
+
+        <div class="filter-row">
+            <div class="filter-item">
+                <label for="search">Event suchen:</label>
+                <input type="text" id="search" placeholder="Event suchen...">
+            </div>
+            <div class="filter-item">
+                <label for="place-filter">Ort:</label>
+                <input type="text" id="place-filter" placeholder="Ort">
+            </div>
+            
+        </div>
+
+        <div class="filter-row">
+            <div class="filter-item">
+                <label for="category-filter">Kategorie:</label>
+                <select id="category-filter">
+                    <option value="">Alle Kategorien</option>
+                    <option value="Programmieren">Programmieren</option>
+                    <option value="Sport">Sport</option>
+                    <option value="Business">Business</option>
+                </select>
+            </div>
+            <div class="filter-item">
+                <label for="date-filter">Datum:</label>
+                <input type="date" id="date-filter">
+            </div>
+        </div>
+
+        <div class="urgency-container">
+            <label for="urgency-filter">Dringlichkeit:</label>
+            <select id="urgency-filter">
+                <option value="">Alle</option>
+                <option value="Hoch">Hoch</option>
+                <option value="Mittel">Mittel</option>
+                <option value="Niedrig">Niedrig</option>
+            </select>
+        </div>
+
+    </header>
+
+    <main id="event-list">
+        <!-- Events werden hier später per JS eingefügt -->
+    </main>
+</body>
+</html>
