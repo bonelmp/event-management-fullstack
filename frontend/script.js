@@ -1,21 +1,34 @@
-// Beispiel-Eventdaten (später aus Backend)
-const events = [
-    { title: "Java Workshop", date: "2025-08-15", category: "Programmieren" ,place: "Berlin", urgency: "Hoch" },
-    { title: "Basketball Turnier", date: "2025-08-20", category: "Sport" ,place: "München", urgency: "Mittel" },
-    { title: "Startup Meetup", date: "2025-08-25", category: "Business", place: "Hamburg", urgency: "Niedrig" },
-];
+//Speichert alle Daten vom Backend
+let allEvents = []
 
-// Funktion: Events in HTML einfügen
-function renderEvents(searchText = "", filterDate = "", filterCategory ="", filterPlace = "", filterUrgency = "") {
-    const list = document.getElementById("event-list");
-    list.innerHTML = "";
+//Daten vom Backend laden
+async function loadEvents(){
+    try{
+        const response = await fetch('http://localhost:8080/api/Events');
+        if(!response.ok) throw new Error("Fehler beim Laden der Daten");
 
-    events
-        .filter(e => e.title.toLowerCase().includes(searchText.toLowerCase()))
-        .filter(e => filterDate === "" || e.date === filterDate)
-        .filter(e => filterCategory === "" || e.category === filterCategory)
-        .filter(e => filterPlace === "" || e.place.toLowerCase().includes(filterPlace.toLowerCase()))
-        .filter(e => filterUrgency === "" || e.urgency === filterUrgency)
+        allEvents = await response.json();
+        renderEvents();
+    } catch (error){
+        console.error("Backend nicht erreichbar:", error);
+        document.getElementById("event-list").innerHTML = "<p>Fehler: Backend-Server nicht gestartet. <p>";
+    }
+}
+
+//Event abhängig vom Filter anzeigen
+function renderEvents() {
+    const eventlist = document.getElementById("event-list");
+    eventlist.innerHTML = "";
+
+    const filters = getFilterValues();
+
+
+    allEvents
+        .filter(e => e.title.toLowerCase().includes(filters.searchText.toLowerCase()))
+        .filter(e => filters.filterDate === "" || e.date === filters.filterDate)
+        .filter(e => filters.filterCategory === "" || e.category === filters.filterCategory)
+        .filter(e => filters.filterPlace === "" || e.place.toLowerCase().includes(filters.filterPlace.toLowerCase()))
+        .filter(e => filters.filterUrgency === "" || e.urgency === filters.filterUrgency)
         .forEach(event => {
             const card = document.createElement("div");
             card.classList.add("event-card");
@@ -26,36 +39,28 @@ function renderEvents(searchText = "", filterDate = "", filterCategory ="", filt
                 <p><strong>Ort:</strong> ${event.place}</p>
                 <p><strong>Dringlichkeit:</strong> ${event.urgency}</p>
             `;
-            list.appendChild(card);
+            eventlist.appendChild(card);
         });
 }
 
-// Suche-Funktion
+//Aktuelle Filterwerte bekommen
 function getFilterValues() {
-    return{
+    return {
         searchText: document.getElementById("search").value,
-    filterDate: document.getElementById("date-filter").value,
-    filterCategory: document.getElementById("category-filter").value,
-    filterPlace: document.getElementById("place-filter").value,
-    filterUrgency: document.getElementById("urgency-filter").value,
-    }
+        filterDate: document.getElementById("date-filter").value,
+        filterCategory: document.getElementById("category-filter").value,
+        filterPlace: document.getElementById("place-filter").value,
+        filterUrgency: document.getElementById("urgency-filter").value,
+    };
 }
 
+//Filter-EventListener
 ["search", "date-filter", "category-filter", "place-filter", "urgency-filter"]
 .forEach(id => {
     document.getElementById(id).addEventListener("input", () => {
-        const filters = getFilterValues();
-        renderEvents(
-            filters.searchText,
-            filters.filterDate,
-            filters.filterCategory,
-            filters.filterPlace,
-            filters.filterUrgency
-        );
+        renderEvents(); // Nutzt die globalen 'allEvents'
     });
 });
 
 
-
-// Initial laden
-renderEvents();
+loadEvents();
