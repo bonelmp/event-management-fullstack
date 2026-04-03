@@ -17,7 +17,7 @@ public class Event {
     private String title;
 
     @Min(value = 0, message = "Preis darf nicht negativ sein")
-    private Double ticketprice;
+    private Double ticketPrice;
 
     @Min(value = 0, message = "Verfügbare Sitze dürfen nicht negativ sein")
     private Integer availableSeats;
