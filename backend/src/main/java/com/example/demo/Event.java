@@ -21,4 +21,16 @@ public class Event {
 
     @Min(value = 0, message = "Verfügbare Sitze dürfen nicht negativ sein")
     private Integer availableSeats;
+
+    @NotBlank(message = "Ort darf nicht leer sein")
+    private String place;
+
+    @NotBlank(message = "Kategorie darf nicht leer sein")
+    private String category;
+
+    @NotBlank(message = "Dringlichkeit darf nicht leer sein")
+    private String urgency;
+
+    private String date;  //In Zukunft lLocalDate für echte Datumslogikl
+
 }
